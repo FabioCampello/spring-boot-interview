@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.interview.api.cidade.dto.CidadeCadastroRequestDTO;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,6 +43,17 @@ public class Cidade implements Serializable {
 	private Estado estado;
 
 	public Cidade() {
+	}
+	
+	public Cidade montaCidade(CidadeCadastroRequestDTO cidadeCadastroRequestDTO) {
+		Cidade cidade = new Cidade();
+		cidade.setId(cidadeCadastroRequestDTO.getId());
+		cidade.setNmCidade(cidadeCadastroRequestDTO.getNmCidade().toUpperCase());
+		Estado estado = new Estado(); 
+		estado.setId(Long.parseLong(cidadeCadastroRequestDTO.getCdEstado()));
+		cidade.setEstado(estado);
+		
+		return cidade;
 	}
 
 }
