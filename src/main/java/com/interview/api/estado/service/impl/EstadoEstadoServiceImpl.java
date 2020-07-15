@@ -22,6 +22,9 @@ public class EstadoEstadoServiceImpl implements EstadoService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 
+	/**
+	 * RECUPERA LISTA DE UNIDADES FEDERATIVAS.
+	 */
 	@Override
 	public List<EstadoDTO> recuperaListaEstados() throws ApiException {
 		List<Estado> listaEstados = estadoRepository.findAll();

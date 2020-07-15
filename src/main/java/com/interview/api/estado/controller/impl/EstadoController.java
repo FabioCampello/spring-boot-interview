@@ -25,6 +25,9 @@ public class EstadoController implements EstadoAPI {
 	@Autowired
 	private EstadoService estadoService;
 
+	/**
+	 * RECUPERA LISTA DE UNIDADES FEDERATIVAS.
+	 */
 	@Override
 	public ResponseEntity<?> recuperaListaEstados() {
 		try {

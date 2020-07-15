@@ -23,8 +23,7 @@ public class VersaoController {
 	@ApiOperation(
 		value = "RECUPERA A VERSÃO ATUAL DA API", 
 		notes = "Recupera a versão atual do API", 
-		nickname = "Recupera a versão da API.", 
-		tags = "VERSAO"
+		nickname = "recuparaVersao" 
 	)
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<String> recuparaVersao() {
