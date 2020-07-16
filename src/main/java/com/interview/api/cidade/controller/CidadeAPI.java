@@ -50,7 +50,22 @@ public interface CidadeAPI {
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="nmCidade", value="Nome da cidade", required=true, dataType="string", paramType="query")
 	})
-	@GetMapping(value = "/recupera")
+	@GetMapping(value = "/nome")
 	ResponseEntity<?> consultarCidadePeloNome(@RequestParam("nmCidade") String nmCidade);
+	
+	@ApiOperation(
+		value = "RECUPERA CIDADE PELO ID DO ESTADO.", 
+		notes = "Recupera cidade pelo id do estado.", 
+		nickname = "consultarCidadePeloIdEstado" 
+	)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Registro recuperado com sucesso.", response = CidadeResponseDTO.class),
+		@ApiResponse(code = 204, message = "Cidade não encontrada."),
+		@ApiResponse(code = 400, message = "Não foi possível prosseguir, existe crítica de negócio.") })
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="idEstado", value="Codigo do estado", required=true, dataType="string", paramType="query")
+	})
+	@GetMapping(value = "/estado")
+	ResponseEntity<?> consultarCidadePeloIdEstado(@RequestParam("idEstado") String idEstado);
 
 }

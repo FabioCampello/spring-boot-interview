@@ -2,8 +2,6 @@ package com.interview.api.cidade.service.impl;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,7 @@ import com.interview.api.cidade.dto.CidadeCadastroRequestDTO;
 import com.interview.api.cidade.dto.CidadeResponseDTO;
 import com.interview.api.cidade.repository.CidadeRepository;
 import com.interview.api.cidade.service.CidadeService;
-import com.interview.api.estado.repository.EstadoRepository;
+import com.interview.api.estado.service.EstadoService;
 import com.interview.commons.entities.Cidade;
 import com.interview.commons.entities.Estado;
 import com.interview.commons.exception.ApiException;
@@ -24,7 +22,7 @@ public class CidadeServiceImpl implements CidadeService {
 	private CidadeRepository cidadeRepository;
 	
 	@Autowired
-	private EstadoRepository estadoRepository;
+	private EstadoService estadoService;
 	
 	/**
 	 * CADASTRA CIDADE.
@@ -34,12 +32,8 @@ public class CidadeServiceImpl implements CidadeService {
 	 */
 	public void cadastro(CidadeCadastroRequestDTO cidadeCadastroRequestDTO) throws ApiException {
 		ValidacoesUtil.validaParametroString(cidadeCadastroRequestDTO.getNmCidade(), "Informe o nome da cidade.");
-		Long cdEstado = ValidacoesUtil.validaIdConvertStringToLong(cidadeCadastroRequestDTO.getCdEstado(), "Estado inválido.");
-		Optional<Estado> estado = estadoRepository.findById(cdEstado);
-		if(isEmpty(estado)) {
-			throw new ApiException("Unidade da federação não encontrada.");
-		}
-		if(!isEmpty(cidadeRepository.validaSeJaExisteCidadeCadastradaNoEstado(cidadeCadastroRequestDTO.getNmCidade().toUpperCase(), cdEstado))) {
+		Estado estado = estadoService.recuperaEstadoById(cidadeCadastroRequestDTO.getCdEstado()).get();
+		if(!isEmpty(cidadeRepository.validaSeJaExisteCidadeCadastradaNoEstado(cidadeCadastroRequestDTO.getNmCidade().toUpperCase(), estado.getId()))) {
 			throw new ApiException("Cidade já cadastrada nesse estado.");
 		}
 		Cidade cidade = new Cidade();
@@ -55,6 +49,22 @@ public class CidadeServiceImpl implements CidadeService {
 	public CidadeResponseDTO consultarCidadePeloNome(String nmCidade)  throws ApiException {
 		ValidacoesUtil.validaParametroString(nmCidade, "Nome da cidade inválido.");
 		Cidade cidade = cidadeRepository.consultarCidadePeloNome(nmCidade.toUpperCase());
+		if(isEmpty(cidade)) {
+			throw new ApiException("Registro não encontrado.");
+		}
+		CidadeResponseDTO cidadeResponseDTO = new CidadeResponseDTO();
+		return cidadeResponseDTO.montaResponsePorNome(cidade);
+	}
+	
+	/**
+	 * RECUPERA CIDADE PELO ID DO ESTADO
+	 * 
+	 * @param nmCidade
+	 * @return CidadeResponseDTO
+	 */
+	public CidadeResponseDTO consultarCidadePeloIdEstado(String idEstado) throws ApiException {
+		ValidacoesUtil.validaParametroString(idEstado, "Estado inválido.");
+		Cidade cidade = cidadeRepository.consultarCidadePeloIdEstado(ValidacoesUtil.validaIdConvertStringToLong(idEstado, "Estado inválido."));
 		if(isEmpty(cidade)) {
 			throw new ApiException("Registro não encontrado.");
 		}

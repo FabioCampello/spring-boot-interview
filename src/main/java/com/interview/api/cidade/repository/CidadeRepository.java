@@ -26,5 +26,8 @@ public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 	 */
 	@Query(value = "SELECT * FROM TB_CIDADE c WHERE c.nm_cidade = :nmCidade", nativeQuery = true)
 	public Cidade consultarCidadePeloNome(@Param("nmCidade") String nmCidade);
+	
+	@Query(value = "SELECT * FROM TB_CIDADE c WHERE c.id_estado = :idEstado", nativeQuery = true)
+	public Cidade consultarCidadePeloIdEstado(@Param("idEstado") Long idEstado);
 
 }

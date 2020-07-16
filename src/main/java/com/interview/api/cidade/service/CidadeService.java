@@ -8,6 +8,8 @@ public interface CidadeService {
 	
 	void cadastro(CidadeCadastroRequestDTO cidadeDto) throws ApiException;
 	
-	CidadeResponseDTO consultarCidadePeloNome(String nmCidade)  throws ApiException;
+	CidadeResponseDTO consultarCidadePeloNome(String nmCidade) throws ApiException;
+	
+	CidadeResponseDTO consultarCidadePeloIdEstado(String idEstado) throws ApiException; 
 
 }

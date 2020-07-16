@@ -73,5 +73,25 @@ public class CidadeController implements CidadeAPI {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}
 	}
+	
+	@Override
+	public ResponseEntity<?> consultarCidadePeloIdEstado(String idEstado) {
+		try {
+			CidadeResponseDTO cidadeResponseDTO = cidadeService.consultarCidadePeloIdEstado(idEstado);
+			if(isEmpty(cidadeResponseDTO)) {
+				return ResponseEntity.notFound().build();
+			}
+			
+			return ResponseEntity.ok(cidadeResponseDTO);
+		} catch (ApiException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			String idLog = UUID.randomUUID().toString();
+			Map<String, String> parametros = new HashMap<>();
+			parametros.put(Constantes.CODIGOESTADO.toString().toUpperCase(), idEstado);
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "consultarCidadePeloEstado", parametros, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
+		}
+	}
 
 }
