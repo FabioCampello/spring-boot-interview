@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.interview.api.cidade.controller.impl.CidadeController;
 import com.interview.api.cliente.controller.ClienteAPI;
 import com.interview.api.cliente.dto.ClienteCadastroRequestDTO;
 import com.interview.api.cliente.dto.ClienteResponseDTO;
@@ -44,7 +43,7 @@ public class ClienteController implements ClienteAPI {
 			String idLog = UUID.randomUUID().toString();
 			Map<String, String> parametros = new HashMap<>();
 			parametros.put(Constantes.NOME.toString().toUpperCase(), clienteCadastroRequestDTO.getNmCompleto());
-			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "cadastroCliente", parametros, e.getMessage());
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), ClienteController.class.getSimpleName(), "cadastroCliente", parametros, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}
 	}
@@ -70,7 +69,7 @@ public class ClienteController implements ClienteAPI {
 			String idLog = UUID.randomUUID().toString();
 			Map<String, String> parametros = new HashMap<>();
 			parametros.put(Constantes.NOME.toString().toUpperCase(), nmCliente);
-			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "consultarClientePeloNome", parametros, e.getMessage());
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), ClienteController.class.getSimpleName(), "consultarClientePeloNome", parametros, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}
 	}
@@ -96,7 +95,7 @@ public class ClienteController implements ClienteAPI {
 			String idLog = UUID.randomUUID().toString();
 			Map<String, String> parametros = new HashMap<>();
 			parametros.put(Constantes.CODIGO.toString().toUpperCase(), idCliente);
-			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "consultarClientePeloId", parametros, e.getMessage());
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), ClienteController.class.getSimpleName(), "consultarClientePeloId", parametros, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}
 	}
@@ -112,7 +111,7 @@ public class ClienteController implements ClienteAPI {
 		try {
 			ClienteResponseDTO clienteResponseDTO = clienteService.removeCliente(idCliente);
 			if (isEmpty(clienteResponseDTO)) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				return ResponseEntity.notFound().build();
 			}
 			return ResponseEntity.ok(clienteResponseDTO);
 		} catch (ApiException e) {
@@ -121,9 +120,33 @@ public class ClienteController implements ClienteAPI {
 			String idLog = UUID.randomUUID().toString();
 			Map<String, String> parametros = new HashMap<>();
 			parametros.put(Constantes.CODIGO.toString(), idCliente);
-			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "removeCliente", parametros, e.getMessage());
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), ClienteController.class.getSimpleName(), "removeCliente", parametros, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}
 	}
+	
+	/**
+	 *  ATUALIZA O NOME DO CLIENTE.
+	 *  
+	 * @param nmCliente
+	 * @param idCliente
+	 * @return
+	 */
+	@Override
+	public ResponseEntity<?> atualizaNomeCliente(String nmCliente, String idCliente) {
+		try {
+			clienteService.atualizaNomeCliente(nmCliente, idCliente);
+			return ResponseEntity.ok().build();
+		} catch (ApiException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			String idLog = UUID.randomUUID().toString();
+			Map<String, String> parametros = new HashMap<>();
+			parametros.put(Constantes.NOME.toString(), nmCliente);
+			parametros.put(Constantes.CODIGO.toString(), idCliente);
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), ClienteController.class.getSimpleName(), "atualizaNomeCliente", parametros, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
+		}
+	} 
 	
 }

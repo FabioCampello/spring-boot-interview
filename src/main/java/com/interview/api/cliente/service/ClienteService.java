@@ -15,5 +15,7 @@ public interface ClienteService {
 	ClienteResponseDTO consultarClientePeloId(String idCliente) throws ApiException;
 	
 	ClienteResponseDTO removeCliente(String id) throws ApiException;
+	
+	void atualizaNomeCliente(String nmCliente, String idCliente) throws ApiException;
 
 }

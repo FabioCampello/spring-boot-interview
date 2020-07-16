@@ -88,11 +88,23 @@ public class ClienteServiceImpl implements ClienteService {
 	 * @param idCliente
 	 * @return ClienteResponseDTO
 	 */
+	@Override
 	@Transactional(rollbackOn = { Exception.class, ApiException.class })
 	public ClienteResponseDTO removeCliente(String idCliente) throws ApiException {
 		ClienteResponseDTO clienteResponseDTO = consultarClientePeloId(idCliente);
 		clienteRepository.deleteById(ValidacoesUtil.validaParamConvertStringToLong(idCliente, "Código do usuário inválido."));
 		return clienteResponseDTO;
 	} 
+	
+	/**
+	 * ATUALIZA O NOME DO CLIENTE.
+	 * 
+	 * @throws ApiException 
+	 */
+	@Override
+	public void atualizaNomeCliente(String nmCliente, String idCliente) throws ApiException {
+		ValidacoesUtil.validaParametroString(nmCliente, "Nome inválido.");
+		clienteRepository.atualizaNomeCliente(nmCliente, ValidacoesUtil.validaParamConvertStringToLong(idCliente, "idCliente inválido."));
+	}
 
 }

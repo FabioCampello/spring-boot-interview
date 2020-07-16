@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,7 +73,7 @@ public interface ClienteAPI {
 	@ApiOperation(
 		value = "REMOVE REGISTRO DE CLIENTE.", 
 		notes = "Remove registro de cliente.", 
-		nickname = "Remove registro de cliente."
+		nickname = "removeCliente"
 	)
 	@ApiResponses(value = {
 		@ApiResponse(code = 200, message = "Registro removido com sucesso.", response = ClienteResponseDTO.class),
@@ -82,5 +83,16 @@ public interface ClienteAPI {
 	})
 	@DeleteMapping(value = "/remove")
 	public ResponseEntity<?> removeCliente(@RequestParam("idCliente") String idCliente);
+	
+	@ApiOperation(
+		value = "ATUALIZA O NOME DO CLIENTE.", 
+		notes = "Atualiza o nome do cliente.", 
+		nickname = "atualizaNomeCliente"
+	)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Registro atualizado com sucesso."),
+		@ApiResponse(code = 400, message = "Não foi possível prosseguir, existe crítica de negócio.") })
+	@PutMapping(value = "/atualizaNome")
+	ResponseEntity<?> atualizaNomeCliente(@RequestParam("nmCliente") String nmCliente, @RequestParam("idCliente") String idCliente);
 		
 }
