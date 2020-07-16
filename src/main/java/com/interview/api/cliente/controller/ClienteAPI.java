@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,5 +68,19 @@ public interface ClienteAPI {
 	})
 	@GetMapping(value = "/id")
 	ResponseEntity<?> consultarClientePeloId(@RequestParam("idCliente") String idCliente);
+	
+	@ApiOperation(
+		value = "REMOVE REGISTRO DE CLIENTE.", 
+		notes = "Remove registro de cliente.", 
+		nickname = "Remove registro de cliente."
+	)
+	@ApiResponses(value = {
+		@ApiResponse(code = 200, message = "Registro removido com sucesso.", response = ClienteResponseDTO.class),
+		@ApiResponse(code = 400, message = "Não foi possível prosseguir, existe crítica de negócio.") })
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="idCliente", value="Código do cliente", required=true, dataType="string", paramType="query")
+	})
+	@DeleteMapping(value = "/remove")
+	public ResponseEntity<?> removeCliente(@RequestParam("idCliente") String idCliente);
 		
 }

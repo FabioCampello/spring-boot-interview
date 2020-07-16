@@ -13,5 +13,7 @@ public interface ClienteService {
 	List<ClienteResponseDTO> consultarClientePeloNome(String nmCliente) throws ApiException;
 
 	ClienteResponseDTO consultarClientePeloId(String idCliente) throws ApiException;
+	
+	ClienteResponseDTO removeCliente(String id) throws ApiException;
 
 }

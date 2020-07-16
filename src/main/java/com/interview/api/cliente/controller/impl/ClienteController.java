@@ -27,6 +27,12 @@ public class ClienteController implements ClienteAPI {
 	@Autowired
 	private ClienteService clienteService;
 
+	/**
+	 * CADASTRA CLIENTE.
+	 * 
+	 * @param ClienteCadastroRequestDTO
+	 * @return void
+	 */
 	@Override
 	public ResponseEntity<?> cadastroCliente(ClienteCadastroRequestDTO clienteCadastroRequestDTO) {
 		try {
@@ -43,6 +49,12 @@ public class ClienteController implements ClienteAPI {
 		}
 	}
 
+	/**
+	 * RECUPERA CLIENTE PELO NOME
+	 * 
+	 * @param nmCliente
+	 * @return ClienteResponseDTO
+	 */
 	@Override
 	public ResponseEntity<?> consultarClientePeloNome(String nmCliente) {
 		try {
@@ -63,6 +75,12 @@ public class ClienteController implements ClienteAPI {
 		}
 	}
 
+	/**
+	 * RECUPERA CLIENTE PELO ID
+	 * 
+	 * @param nmCliente
+	 * @return ClienteResponseDTO
+	 */
 	@Override
 	public ResponseEntity<?> consultarClientePeloId(String idCliente) {
 		try {
@@ -79,6 +97,31 @@ public class ClienteController implements ClienteAPI {
 			Map<String, String> parametros = new HashMap<>();
 			parametros.put(Constantes.CODIGO.toString().toUpperCase(), idCliente);
 			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "consultarClientePeloId", parametros, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
+		}
+	}
+	
+	/**
+	 * REMOVENDO CLIENTE PELO O ID.
+	 * 
+	 * @param idCliente
+	 * @return ClienteResponseDTO
+	 */
+	@Override
+	public ResponseEntity<?> removeCliente(String idCliente) {
+		try {
+			ClienteResponseDTO clienteResponseDTO = clienteService.removeCliente(idCliente);
+			if (isEmpty(clienteResponseDTO)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return ResponseEntity.ok(clienteResponseDTO);
+		} catch (ApiException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			String idLog = UUID.randomUUID().toString();
+			Map<String, String> parametros = new HashMap<>();
+			parametros.put(Constantes.CODIGO.toString(), idCliente);
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "removeCliente", parametros, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}
 	}

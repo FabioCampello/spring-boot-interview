@@ -5,6 +5,8 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,5 +81,18 @@ public class ClienteServiceImpl implements ClienteService {
 		ClienteResponseDTO clienteResponseDTO = new ClienteResponseDTO();
 		return clienteResponseDTO.montaClienteResponse(cliente);
 	}
+	
+	/**
+	 * REMOVENDO CLIENTE PELO O ID.
+	 * 
+	 * @param idCliente
+	 * @return ClienteResponseDTO
+	 */
+	@Transactional(rollbackOn = { Exception.class, ApiException.class })
+	public ClienteResponseDTO removeCliente(String idCliente) throws ApiException {
+		ClienteResponseDTO clienteResponseDTO = consultarClientePeloId(idCliente);
+		clienteRepository.deleteById(ValidacoesUtil.validaParamConvertStringToLong(idCliente, "Código do usuário inválido."));
+		return clienteResponseDTO;
+	} 
 
 }
