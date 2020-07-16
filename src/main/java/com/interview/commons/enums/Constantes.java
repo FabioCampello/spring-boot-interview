@@ -7,8 +7,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public enum Constantes {
 	
-	NOME("NomeCidade"),
-	CODIGOESTADO("CodigoEstado"),
+	NOME("Nome"),
+	CODIGO("Codigo"),
 
 	// OUTROS
 	ERRO("ERRO"),

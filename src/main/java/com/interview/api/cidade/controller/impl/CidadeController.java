@@ -42,7 +42,7 @@ public class CidadeController implements CidadeAPI {
 			String idLog = UUID.randomUUID().toString();
 			Map<String, String> parametros = new HashMap<>();
 			parametros.put(Constantes.NOME.toString().toUpperCase(), cidadeCadastroRequestDTO.getNmCidade());
-			parametros.put(Constantes.CODIGOESTADO.toString().toUpperCase(), cidadeCadastroRequestDTO.getCdEstado().toString());
+			parametros.put(Constantes.CODIGO.toString().toUpperCase(), cidadeCadastroRequestDTO.getCdEstado().toString());
 			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "cadastroCidade", parametros, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}
@@ -74,6 +74,12 @@ public class CidadeController implements CidadeAPI {
 		}
 	}
 	
+	/**
+	 * RECUPERA CIDADE PELO ID DO ESTADO
+	 * 
+	 * @param idEstado
+	 * @return CidadeResponseDTO
+	 */
 	@Override
 	public ResponseEntity<?> consultarCidadePeloIdEstado(String idEstado) {
 		try {
@@ -88,7 +94,33 @@ public class CidadeController implements CidadeAPI {
 		} catch (Exception e) {
 			String idLog = UUID.randomUUID().toString();
 			Map<String, String> parametros = new HashMap<>();
-			parametros.put(Constantes.CODIGOESTADO.toString().toUpperCase(), idEstado);
+			parametros.put(Constantes.CODIGO.toString().toUpperCase(), idEstado);
+			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "consultarCidadePeloEstado", parametros, e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
+		}
+	}
+	
+	/**
+	 * RECUPERA CIDADE PELO NOME DO ESTADO
+	 * 
+	 * @param nmEstado
+	 * @return CidadeResponseDTO
+	 */
+	@Override
+	public ResponseEntity<?> consultarCidadePeloNomeEstado(String nmEstado) {
+		try {
+			CidadeResponseDTO cidadeResponseDTO = cidadeService.consultarCidadePeloNomeEstado(nmEstado);
+			if(isEmpty(cidadeResponseDTO)) {
+				return ResponseEntity.notFound().build();
+			}
+			
+			return ResponseEntity.ok(cidadeResponseDTO);
+		} catch (ApiException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		} catch (Exception e) {
+			String idLog = UUID.randomUUID().toString();
+			Map<String, String> parametros = new HashMap<>();
+			parametros.put(Constantes.NOME.toString().toUpperCase(), nmEstado);
 			LogUtil.logGenerico(idLog, Constantes.ERRO.toString(), CidadeController.class.getSimpleName(), "consultarCidadePeloEstado", parametros, e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constantes.ERROR_LOG + idLog);
 		}

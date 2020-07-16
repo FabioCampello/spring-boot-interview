@@ -30,6 +30,7 @@ public class CidadeServiceImpl implements CidadeService {
 	 * @param CidadeCadastroRequestDTO
 	 * @return void
 	 */
+	@Override
 	public void cadastro(CidadeCadastroRequestDTO cidadeCadastroRequestDTO) throws ApiException {
 		ValidacoesUtil.validaParametroString(cidadeCadastroRequestDTO.getNmCidade(), "Informe o nome da cidade.");
 		Estado estado = estadoService.recuperaEstadoById(cidadeCadastroRequestDTO.getCdEstado()).get();
@@ -46,6 +47,7 @@ public class CidadeServiceImpl implements CidadeService {
 	 * @param nmCidade
 	 * @return CidadeResponseDTO
 	 */
+	@Override
 	public CidadeResponseDTO consultarCidadePeloNome(String nmCidade)  throws ApiException {
 		ValidacoesUtil.validaParametroString(nmCidade, "Nome da cidade inválido.");
 		Cidade cidade = cidadeRepository.consultarCidadePeloNome(nmCidade.toUpperCase());
@@ -62,9 +64,27 @@ public class CidadeServiceImpl implements CidadeService {
 	 * @param nmCidade
 	 * @return CidadeResponseDTO
 	 */
+	@Override
 	public CidadeResponseDTO consultarCidadePeloIdEstado(String idEstado) throws ApiException {
 		ValidacoesUtil.validaParametroString(idEstado, "Estado inválido.");
 		Cidade cidade = cidadeRepository.consultarCidadePeloIdEstado(ValidacoesUtil.validaIdConvertStringToLong(idEstado, "Estado inválido."));
+		if(isEmpty(cidade)) {
+			throw new ApiException("Registro não encontrado.");
+		}
+		CidadeResponseDTO cidadeResponseDTO = new CidadeResponseDTO();
+		return cidadeResponseDTO.montaResponsePorNome(cidade);
+	}
+	
+	/**
+	 * RECUPERA CIDADE PELO NOME DO ESTADO
+	 * 
+	 * @param nmEstado
+	 * @return CidadeResponseDTO
+	 */
+	@Override
+	public CidadeResponseDTO consultarCidadePeloNomeEstado(String nmEstado) throws ApiException {
+		ValidacoesUtil.validaParametroString(nmEstado, "Nome estado inválido.");
+		Cidade cidade = cidadeRepository.consultarCidadePeloNomeEstado(nmEstado);
 		if(isEmpty(cidade)) {
 			throw new ApiException("Registro não encontrado.");
 		}
