@@ -67,7 +67,7 @@ public class CidadeServiceImpl implements CidadeService {
 	@Override
 	public CidadeResponseDTO consultarCidadePeloIdEstado(String idEstado) throws ApiException {
 		ValidacoesUtil.validaParametroString(idEstado, "Estado inválido.");
-		Cidade cidade = cidadeRepository.consultarCidadePeloIdEstado(ValidacoesUtil.validaIdConvertStringToLong(idEstado, "Estado inválido."));
+		Cidade cidade = cidadeRepository.consultarCidadePeloIdEstado(ValidacoesUtil.validaParamConvertStringToLong(idEstado, "Estado inválido."));
 		if(isEmpty(cidade)) {
 			throw new ApiException("Registro não encontrado.");
 		}

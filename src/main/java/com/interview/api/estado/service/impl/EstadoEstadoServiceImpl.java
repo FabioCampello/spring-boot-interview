@@ -54,7 +54,7 @@ public class EstadoEstadoServiceImpl implements EstadoService {
 	@Override
 	public Optional<Estado> recuperaEstadoById(String cdEstado) throws ApiException {
 		ValidacoesUtil.validaParametroString(cdEstado, "Informe o estado.");
-		Optional<Estado> estado = estadoRepository.findById(ValidacoesUtil.validaIdConvertStringToLong(cdEstado, "Estado inválido."));
+		Optional<Estado> estado = estadoRepository.findById(ValidacoesUtil.validaParamConvertStringToLong(cdEstado, "Estado inválido."));
 		if(isEmpty(estado)) {
 			throw new ApiException("Unidade da federação não encontrada.");
 		}
