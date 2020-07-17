@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.interview.api.cidade.service.CidadeService;
 import com.interview.api.cliente.dto.ClienteCadastroRequestDTO;
 import com.interview.api.cliente.dto.ClienteResponseDTO;
 import com.interview.api.cliente.repository.ClienteRepository;
@@ -24,6 +25,9 @@ public class ClienteServiceImpl implements ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
+	@Autowired
+	private CidadeService cidadeService;
+	
 	/**
 	 * CADASTRA CLIENTE.
 	 * 
@@ -34,7 +38,12 @@ public class ClienteServiceImpl implements ClienteService {
 	public void cadastro(ClienteCadastroRequestDTO clienteCadastroRequestDTO) throws ApiException {
 		validaClienteCadastro(clienteCadastroRequestDTO);
 		Cliente cliente = new Cliente();
-		clienteRepository.save(cliente.montaClienteCadastro(clienteCadastroRequestDTO));
+		cidadeService.consultaCidadePeloId(clienteCadastroRequestDTO.getIdCidade(), "CLIENTE");
+		cliente = clienteRepository.save(cliente.montaClienteCadastro(clienteCadastroRequestDTO));
+		clienteRepository.gravaCidadeUsuario(
+			cliente.getId(), 
+			ValidacoesUtil.validaParamConvertStringToLong(clienteCadastroRequestDTO.getIdCidade(), "Informe o código da cidade.")
+		);
 	}
 	
 	private void validaClienteCadastro(ClienteCadastroRequestDTO clienteCadastroRequestDTO) throws ApiException {

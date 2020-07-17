@@ -38,5 +38,16 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 	@Transactional
 	@Query(value = "UPDATE TB_CLIENTE c SET c.nm_completo = :nmCliente WHERE c.id = :idCliente", nativeQuery = true)
 	public void atualizaNomeCliente(@Param("nmCliente") String nmCliente, @Param("idCliente") Long idCliente);
+	
+	/**
+	 * ASSOCIANDO CLIENTE À CIDADE
+	 * 
+	 * @param idCliente
+	 * @param idCidade
+	 */
+	@Modifying
+	@Transactional
+	@Query(value = "INSERT INTO CLIENTE_CIDADE (cliente_id, cidade_id) VALUES (:idCliente, :idCidade)", nativeQuery = true)
+	public void gravaCidadeUsuario(@Param("idCliente") Long idCliente, @Param("idCidade") Long idCidade);
 
 }

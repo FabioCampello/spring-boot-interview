@@ -15,6 +15,7 @@ public class ClienteCadastroRequestDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "GMT-3", locale = "pt-BR")
 	private String dtNascimento;
 	private String numIdade;
+	private String idCidade;
 	
 	public ClienteCadastroRequestDTO() {
 	}

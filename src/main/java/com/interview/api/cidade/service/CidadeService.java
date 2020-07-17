@@ -13,5 +13,7 @@ public interface CidadeService {
 	CidadeResponseDTO consultarCidadePeloIdEstado(String idEstado) throws ApiException; 
 	
 	CidadeResponseDTO consultarCidadePeloNomeEstado(String nmEstado) throws ApiException;
+	
+	CidadeResponseDTO consultaCidadePeloId(String idCidade, String path) throws ApiException;
 
 }

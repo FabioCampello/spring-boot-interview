@@ -2,6 +2,8 @@ package com.interview.api.cidade.service.impl;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,6 +92,24 @@ public class CidadeServiceImpl implements CidadeService {
 		}
 		CidadeResponseDTO cidadeResponseDTO = new CidadeResponseDTO();
 		return cidadeResponseDTO.montaResponsePorNome(cidade);
+	}
+	
+	/**
+	 * RECUPERA CIDADE PELO ID
+	 * 
+	 * @param idCidade
+	 * @return CidadeResponseDTO
+	 */
+	public CidadeResponseDTO consultaCidadePeloId(String idCidade, String path) throws ApiException {
+		Optional<Cidade> cidade = cidadeRepository.findById(ValidacoesUtil.validaParamConvertStringToLong(idCidade, "Código da cidade inválido."));
+		if(isEmpty(cidade)) {
+			if(path.equals("CLIENTE")) {
+				throw new ApiException("Registro de cidade não encontrado.");
+			}
+			throw new ApiException("Registro não encontrado.");
+		}
+		CidadeResponseDTO cidadeResponseDTO = new CidadeResponseDTO();
+		return cidadeResponseDTO.montaResponsePorNome(cidade.get());
 	}
 	
 }

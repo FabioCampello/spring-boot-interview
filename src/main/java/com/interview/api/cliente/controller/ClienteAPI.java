@@ -29,8 +29,8 @@ import io.swagger.annotations.ApiResponses;
 public interface ClienteAPI {
 
 	@ApiOperation(
-		value = "CADASTRA UM NOV CLIENTE.", 
-		notes = "Cadastra um nov cliente.", 
+		value = "CADASTRA UM NOVO CLIENTE.", 
+		notes = "Cadastra um novo cliente.", 
 		nickname = "cadastroCliente"
 	)
 	@ApiResponses(value = {
