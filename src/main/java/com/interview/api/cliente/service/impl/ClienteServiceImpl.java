@@ -113,7 +113,11 @@ public class ClienteServiceImpl implements ClienteService {
 	@Override
 	public void atualizaNomeCliente(String nmCliente, String idCliente) throws ApiException {
 		ValidacoesUtil.validaParametroString(nmCliente, "Nome inválido.");
-		clienteRepository.atualizaNomeCliente(nmCliente, ValidacoesUtil.validaParamConvertStringToLong(idCliente, "idCliente inválido."));
+		Long id = ValidacoesUtil.validaParamConvertStringToLong(idCliente, "idCliente inválido.");
+		if(isEmpty(clienteRepository.consultarClientePeloId(id))) {
+			throw new ApiException("Nenhum registro não encontrado.");
+		}
+		clienteRepository.atualizaNomeCliente(nmCliente, id);
 	}
 
 }
